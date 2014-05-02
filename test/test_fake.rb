@@ -1,21 +1,9 @@
-require 'capybara'
-require 'test/unit'
-require 'pry'
+require_relative './test_helper'
 
-class CapybaraTestCase < Test::Unit::TestCase
-  include Capybara::DSL
-
-  setup do
-    Capybara.current_driver = Capybara.javascript_driver # :selenium by default
-  end
-
-  def teardown
-    Capybara.reset_sessions!
-    Capybara.use_default_driver
-  end
-
+class CapybaraTestCase < IntegrationTest #Test::Unit::TestCase
   def test_works
-    visit_google
-    assert_equal true, page.has_content?('Google')
+    visit 'http://news.ycombinator.com'
+    page.save_screenshot('./wow_phantomjs_does_screenshots.png', :full => true)
+    assert_true page.has_content?('Hacker News')
   end
 end
